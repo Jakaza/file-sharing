@@ -13,7 +13,7 @@ public class FileServer {
         ServerSocket serverSocket;
         Socket socket = null;
         int port = 9000;
-        String filePath;
+        String filePath = "Images/picture1.jpg";
 
         try {
             serverSocket = new ServerSocket(port);
@@ -21,6 +21,7 @@ public class FileServer {
             socket = serverSocket.accept();
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            receiveFile(filePath);
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -46,7 +47,9 @@ public class FileServer {
         byte[] buffer = new byte[4*1024];
 
         while((bytes = dataInputStream.read(buffer, 0, (int) Math.max(size,buffer.length))) != -1){
-
+            fileOutputStream.write(buffer,0,bytes);
+            fileOutputStream.flush();
         }
+        fileOutputStream.close();
     }
 }
